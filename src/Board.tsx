@@ -119,6 +119,9 @@ class Board extends React.Component<{}, {}> {
               <td>{this.getStability(this.turnColor())}</td>
             </tr>
             <tr>
+              <td colSpan={2}>&nbsp;</td>
+            </tr>
+            <tr>
               <td>Black:</td>
               <td>{this.discCount(Color.Black)}</td>
             </tr>
@@ -129,9 +132,20 @@ class Board extends React.Component<{}, {}> {
             </tbody>
           </table>
 
+          <br />
+          <div className="wait">{this.showTurn()}</div>
+
         </div>
       </div>
     );
+  }
+
+  public showTurn(): string {
+    if (this.isGameOver()) {
+      return "Game Over!";
+    }
+
+    return this.game.aiThinking ? "AI turn.. thinking" : "Your turn!";
   }
 
   public initalize(): void {
@@ -146,26 +160,23 @@ class Board extends React.Component<{}, {}> {
     const mobility: number = this.getMobility(color);
     const stability: number = this.getStability(color);
 
-    console.log("totalDiscs: " + totalDiscs);
-    console.log("mobility: " + mobility);
-    console.log("stability: " + stability);
-
     let score: number = 0;
 
     if (totalDiscs < 16) {
-      score += 50 * mobility;
-      score += 100 * stability;
+      score += 70 * mobility;
+      score += 20 * stability;
+      score += 10 * totalDiscs;
     } else if (totalDiscs < 32) {
-      score += 40 * mobility;
+      score += 10 * mobility;
       score += 50 * stability;
-      score += 60 * totalDiscs;
+      score += 20 * totalDiscs;
     } else if (totalDiscs < 48) {
-      score += 20 * mobility;
-      score += 70 * stability;
-      score += 60 * totalDiscs;
+      score += 10 * mobility;
+      score += 60 * stability;
+      score += 30 * totalDiscs;
     } else {
-      score += 50 * stability;
-      score += 100 * totalDiscs;
+      score += 10 * stability;
+      score += 90 * totalDiscs;
     }
 
     return score;
@@ -205,9 +216,9 @@ class Board extends React.Component<{}, {}> {
     const white = this.piecesValue(Color.White);
 
     if (color === Color.White) {
-      return white - black;
+      return 10 * (white - black);
     } else {
-      return black - white;
+      return 10 * (black - white);
     }
   }
 

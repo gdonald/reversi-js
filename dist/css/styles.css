@@ -67,3 +67,11 @@ body {
   width: 180px;
   text-align: left;
 }
+
+.wait {
+  padding: 20px 0 0 4px;
+}
+
+.hidden {
+  display: none;
+}

@@ -23,7 +23,7 @@ class Game extends React.Component<{}, {}> {
 
   public board: Board;
   public mounted: boolean = false;
-  public showWait: boolean = false;
+  public aiThinking: boolean = false;
 
   constructor(props) {
     super(props);
@@ -67,28 +67,36 @@ class Game extends React.Component<{}, {}> {
       if (this.board.hasLegalMove(Piece.otherColor(this.board.playerColor))) {
         this.board.changeTurn();
 
-        this.showWait = true;
+        this.aiThinking = true;
         this.forceUpdateIfMounted();
 
-        while (true) {
-
-          this.aiTurn();
-
-          if (this.board.hasLegalMove(this.board.playerColor)) {
-            break;
-          }
-
-          if (!this.board.hasLegalMove(this.board.aiColor)) {
-            break;
-          }
-        }
-
-        this.board.changeTurn();
+        this.waitAiTurn();
       }
     }
+  }
 
-    this.showWait = false;
-    this.forceUpdateIfMounted();
+  private waitAiTurn() {
+    const that = this;
+    setTimeout( () => {
+      while (true) {
+        that.aiTurn();
+
+        if (this.board.hasLegalMove(this.board.playerColor)) {
+          this.aiThinking = false;
+          break;
+        }
+
+        if (!this.board.hasLegalMove(this.board.aiColor)) {
+          this.aiThinking = false;
+          break;
+        }
+      }
+
+      this.board.changeTurn();
+      this.aiThinking = false;
+      this.forceUpdateIfMounted();
+
+    }, 200);
   }
 
   private aiTurn(): void {
@@ -111,7 +119,7 @@ class Game extends React.Component<{}, {}> {
     for (const piece of pieces) {
       const b = Board.clone(board);
       b.flipPieces(piece);
-      const value: number = this.minimaxValue(b, turnColor, Piece.otherColor(turnColor), 1);
+      const value: number = this.minimaxValue(b, turnColor, Piece.otherColor(turnColor), 1, -1000000, 1000000);
 
       if (value > bestValue) {
         bestValue = value;
@@ -122,30 +130,37 @@ class Game extends React.Component<{}, {}> {
     return bestPiece;
   }
 
-  private minimaxValue(board: Board, originalColor: Color, currentColor: Color, depth: number): number {
-    if (depth === 4 || board.isGameOver()) {
+  private minimaxValue(board: Board, originalColor: Color, currentColor: Color,
+                       depth: number, alpha: number, beta: number): number {
+    if (depth === 5 || board.isGameOver()) {
       return this.heuristic(board, originalColor);
     }
 
     const pieces = this.movesList(board, currentColor);
+    const otherColor: Color = Piece.otherColor(originalColor);
 
     if (pieces.length === 0) {
-      return this.minimaxValue(board, originalColor, Piece.otherColor(originalColor), depth + 1);
+      return this.minimaxValue(board, originalColor, otherColor, depth + 1, alpha, beta);
     } else {
       let bestValue: number = originalColor === currentColor ? -1000000 : 1000000;
 
       for (const piece of pieces) {
         const b = Board.clone(board);
         b.flipPieces(piece);
-        const value: number = this.minimaxValue(b, originalColor, Piece.otherColor(originalColor), depth + 1);
 
-        if (originalColor === currentColor) {
-          if (value > bestValue) {
+        const value: number = this.minimaxValue(b, originalColor, otherColor, depth + 1, alpha, beta);
+
+        if (originalColor === currentColor) { // max
+          alpha = Math.max(alpha, bestValue);
+          if (beta <= alpha) {
             bestValue = value;
+            break;
           }
-        } else {
-          if (value < bestValue) {
+        } else { // min
+          beta = Math.min(beta, bestValue);
+          if (beta <= alpha) {
             bestValue = value;
+            break;
           }
         }
       }
