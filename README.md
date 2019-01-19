@@ -1,6 +1,6 @@
 ## reversi-js
 
-Reversi (or "Othello" if you like) written in Typescript using React.
+Reversi (Othello) written in Typescript using React.
 
 #### Install
 
