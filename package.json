@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://gd@darkclear.io:2217/git/reversi-js"
+    "url": "git@github.com:gdonald/reversi-js.git"
   },
   "author": "",
   "license": "ISC",
