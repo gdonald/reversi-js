@@ -29,6 +29,7 @@
   "dependencies": {
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
+    "lodash": "^4.17.13",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "querystringify": "^2.1.1"
