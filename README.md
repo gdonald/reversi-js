@@ -2,6 +2,8 @@
 
 Reversi (Othello) written in Typescript using React.
 
+![Reversi (Othello)](https://raw.githubusercontent.com/gdonald/reversi-js/main/ss.png "Reversi (Othello)")
+
 #### Install
 
 ``
@@ -18,6 +20,6 @@ npm start
 
 [http://localhost:9000/](http://localhost:9000/)
 
-#### Demo
+#### Play Online / Demo
 
-[http://reversi.gregdonald.com/](http://reversi.gregdonald.com/)
+[https://gdonald.github.io/reversi-js/](https://gdonald.github.io/reversi-js/)
