@@ -57,7 +57,7 @@ class Board extends React.Component<{}, {}> {
   public render() {
     return (
       <div className="outer">
-        <div className="history">
+        {/* <div className="history">
           <table>
             <thead>
             <tr>
@@ -76,6 +76,40 @@ class Board extends React.Component<{}, {}> {
             })}
             </tbody>
           </table>
+        </div> */}
+
+        <div className="analysis">
+          <table>
+            <thead>
+            <tr>
+              <th colSpan={2} className="title">Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            {/* <tr>
+              <td>Mobility</td>
+              <td>{this.getMobility(this.turnColor())}</td>
+            </tr>
+            <tr>
+              <td>Stability</td>
+              <td>{this.getStability(this.turnColor())}</td>
+            </tr>
+            <tr>
+              <td colSpan={2}>&nbsp;</td>
+            </tr> */}
+            <tr>
+              <td>Black:</td>
+              <td>{this.discCount(Color.Black)}</td>
+            </tr>
+            <tr>
+              <td>White:</td>
+              <td>{this.discCount(Color.White)}</td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div className="wait">{this.showTurn()}</div>
+
         </div>
 
         <div className="board">
@@ -100,41 +134,6 @@ class Board extends React.Component<{}, {}> {
             })}
             </tbody>
           </table>
-        </div>
-
-        <div className="analysis">
-          <table>
-            <thead>
-            <tr>
-              <th colSpan={2} className="title">Analysis</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>Mobility</td>
-              <td>{this.getMobility(this.turnColor())}</td>
-            </tr>
-            <tr>
-              <td>Stability</td>
-              <td>{this.getStability(this.turnColor())}</td>
-            </tr>
-            <tr>
-              <td colSpan={2}>&nbsp;</td>
-            </tr>
-            <tr>
-              <td>Black:</td>
-              <td>{this.discCount(Color.Black)}</td>
-            </tr>
-            <tr>
-              <td>White:</td>
-              <td>{this.discCount(Color.White)}</td>
-            </tr>
-            </tbody>
-          </table>
-
-          <br />
-          <div className="wait">{this.showTurn()}</div>
-
         </div>
       </div>
     );
